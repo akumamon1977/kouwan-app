@@ -391,8 +391,8 @@
   <!-- 写真 -->
   <div class="card">
     <div class="card-title">写真</div>
-    <div class="photo-area" onclick="document.getElementById('photoInput').click()">
-      <input type="file" id="photoInput" accept="image/*" multiple onchange="handlePhotos(event)" />
+    <div class="photo-area">
+      <input type="file" id="photoInput" accept="image/*" multiple onchange="handlePhotos(event)" style="position:absolute;inset:0;opacity:0;width:100%;height:100%;cursor:pointer;z-index:10;" />
       <div class="photo-icon">📷</div>
       <div class="photo-label">タップして写真を追加</div>
       <div class="photo-sub">複数枚選択できます</div>
