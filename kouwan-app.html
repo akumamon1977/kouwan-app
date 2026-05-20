@@ -1,0 +1,508 @@
+<!DOCTYPE html>
+<html lang="ja">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>港湾作業報告</title>
+<style>
+  @import url('https://fonts.googleapis.com/css2?family=Noto+Sans+JP:wght@400;500;700;900&display=swap');
+
+  * { box-sizing: border-box; margin: 0; padding: 0; }
+
+  :root {
+    --navy: #0a1628;
+    --blue: #1a3a6b;
+    --accent: #e8a020;
+    --light: #f5f7fa;
+    --white: #ffffff;
+    --gray: #8899aa;
+    --success: #2ecc71;
+    --border: #dde3ec;
+  }
+
+  body {
+    font-family: 'Noto Sans JP', sans-serif;
+    background: var(--light);
+    min-height: 100vh;
+    color: var(--navy);
+  }
+
+  header {
+    background: var(--navy);
+    color: white;
+    padding: 16px 20px;
+    display: flex;
+    align-items: center;
+    gap: 12px;
+    box-shadow: 0 2px 8px rgba(0,0,0,0.3);
+    position: sticky;
+    top: 0;
+    z-index: 100;
+  }
+
+  .header-icon {
+    width: 36px;
+    height: 36px;
+    background: var(--accent);
+    border-radius: 8px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-size: 20px;
+  }
+
+  header h1 {
+    font-size: 18px;
+    font-weight: 700;
+    letter-spacing: 0.05em;
+  }
+
+  header p {
+    font-size: 11px;
+    color: var(--gray);
+    margin-top: 1px;
+  }
+
+  .container {
+    max-width: 600px;
+    margin: 0 auto;
+    padding: 20px 16px 40px;
+  }
+
+  .card {
+    background: var(--white);
+    border-radius: 16px;
+    padding: 20px;
+    margin-bottom: 16px;
+    box-shadow: 0 2px 12px rgba(10,22,40,0.08);
+    border: 1px solid var(--border);
+  }
+
+  .card-title {
+    font-size: 13px;
+    font-weight: 700;
+    color: var(--gray);
+    letter-spacing: 0.1em;
+    text-transform: uppercase;
+    margin-bottom: 16px;
+    display: flex;
+    align-items: center;
+    gap: 8px;
+  }
+
+  .card-title::before {
+    content: '';
+    width: 4px;
+    height: 16px;
+    background: var(--accent);
+    border-radius: 2px;
+  }
+
+  .date-display {
+    background: var(--navy);
+    color: white;
+    border-radius: 12px;
+    padding: 16px;
+    text-align: center;
+  }
+
+  .date-display .date-big {
+    font-size: 28px;
+    font-weight: 900;
+    letter-spacing: 0.05em;
+  }
+
+  .date-display .date-small {
+    font-size: 12px;
+    color: var(--gray);
+    margin-top: 4px;
+  }
+
+  .form-group {
+    margin-bottom: 16px;
+  }
+
+  label {
+    display: block;
+    font-size: 13px;
+    font-weight: 700;
+    color: var(--navy);
+    margin-bottom: 8px;
+  }
+
+  input[type="text"],
+  input[type="number"],
+  select {
+    width: 100%;
+    padding: 12px 16px;
+    border: 2px solid var(--border);
+    border-radius: 10px;
+    font-size: 16px;
+    font-family: 'Noto Sans JP', sans-serif;
+    color: var(--navy);
+    background: var(--white);
+    transition: border-color 0.2s;
+    -webkit-appearance: none;
+  }
+
+  input:focus, select:focus {
+    outline: none;
+    border-color: var(--blue);
+  }
+
+  .toggle-group {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 10px;
+  }
+
+  .toggle-btn {
+    padding: 14px;
+    border: 2px solid var(--border);
+    border-radius: 10px;
+    background: var(--white);
+    font-size: 15px;
+    font-weight: 700;
+    font-family: 'Noto Sans JP', sans-serif;
+    color: var(--gray);
+    cursor: pointer;
+    transition: all 0.2s;
+    text-align: center;
+  }
+
+  .toggle-btn.active {
+    border-color: var(--accent);
+    background: var(--accent);
+    color: var(--navy);
+  }
+
+  .quantity-row {
+    display: grid;
+    grid-template-columns: 1fr auto 1fr;
+    gap: 10px;
+    align-items: center;
+  }
+
+  .quantity-row .separator {
+    font-size: 20px;
+    font-weight: 900;
+    color: var(--gray);
+    text-align: center;
+  }
+
+  .photo-area {
+    border: 2px dashed var(--border);
+    border-radius: 12px;
+    padding: 24px;
+    text-align: center;
+    cursor: pointer;
+    transition: all 0.2s;
+    position: relative;
+  }
+
+  .photo-area:hover {
+    border-color: var(--blue);
+    background: #f0f4ff;
+  }
+
+  .photo-area input {
+    position: absolute;
+    inset: 0;
+    opacity: 0;
+    cursor: pointer;
+    width: 100%;
+    height: 100%;
+  }
+
+  .photo-icon { font-size: 32px; margin-bottom: 8px; }
+  .photo-label { font-size: 14px; font-weight: 700; color: var(--blue); }
+  .photo-sub { font-size: 12px; color: var(--gray); margin-top: 4px; }
+
+  .photo-grid {
+    display: grid;
+    grid-template-columns: repeat(3, 1fr);
+    gap: 8px;
+    margin-top: 12px;
+  }
+
+  .photo-thumb {
+    aspect-ratio: 1;
+    border-radius: 8px;
+    object-fit: cover;
+    width: 100%;
+    border: 2px solid var(--border);
+  }
+
+  .photo-count {
+    background: var(--blue);
+    color: white;
+    border-radius: 20px;
+    padding: 4px 12px;
+    font-size: 12px;
+    font-weight: 700;
+    display: inline-block;
+    margin-top: 8px;
+  }
+
+  .preview-box {
+    background: var(--navy);
+    color: white;
+    border-radius: 12px;
+    padding: 16px;
+    font-size: 13px;
+    line-height: 1.8;
+    font-family: monospace;
+    white-space: pre-wrap;
+    word-break: break-all;
+  }
+
+  .btn-primary {
+    width: 100%;
+    padding: 16px;
+    background: var(--accent);
+    color: var(--navy);
+    border: none;
+    border-radius: 12px;
+    font-size: 16px;
+    font-weight: 900;
+    font-family: 'Noto Sans JP', sans-serif;
+    cursor: pointer;
+    transition: all 0.2s;
+    letter-spacing: 0.05em;
+  }
+
+  .btn-primary:hover {
+    background: #d4911a;
+    transform: translateY(-1px);
+    box-shadow: 0 4px 16px rgba(232,160,32,0.4);
+  }
+
+  .btn-primary:active {
+    transform: translateY(0);
+  }
+
+  .btn-secondary {
+    width: 100%;
+    padding: 14px;
+    background: var(--white);
+    color: var(--navy);
+    border: 2px solid var(--border);
+    border-radius: 12px;
+    font-size: 14px;
+    font-weight: 700;
+    font-family: 'Noto Sans JP', sans-serif;
+    cursor: pointer;
+    transition: all 0.2s;
+    margin-top: 10px;
+  }
+
+  .btn-secondary:hover {
+    border-color: var(--navy);
+  }
+
+  .toast {
+    position: fixed;
+    bottom: 24px;
+    left: 50%;
+    transform: translateX(-50%) translateY(100px);
+    background: var(--success);
+    color: white;
+    padding: 12px 24px;
+    border-radius: 50px;
+    font-weight: 700;
+    font-size: 14px;
+    transition: transform 0.3s;
+    z-index: 999;
+    white-space: nowrap;
+  }
+
+  .toast.show {
+    transform: translateX(-50%) translateY(0);
+  }
+</style>
+</head>
+<body>
+
+<header>
+  <div class="header-icon">⚓</div>
+  <div>
+    <h1>港湾作業報告</h1>
+    <p>門司港運</p>
+  </div>
+</header>
+
+<div class="container">
+
+  <!-- 日付 -->
+  <div class="card">
+    <div class="card-title">日付</div>
+    <div class="date-display">
+      <div class="date-big" id="dateDisplay"></div>
+      <div class="date-small" id="dayDisplay"></div>
+    </div>
+  </div>
+
+  <!-- 作業情報 -->
+  <div class="card">
+    <div class="card-title">作業情報</div>
+
+    <div class="form-group">
+      <label>場所・SC名</label>
+      <input type="text" id="location" placeholder="例：第一SC、第二SC" />
+    </div>
+
+    <div class="form-group">
+      <label>荷物の種類</label>
+      <input type="text" id="cargo" placeholder="例：パイプ、鉄板、コイル" />
+    </div>
+
+    <div class="form-group">
+      <label>作業種別</label>
+      <div class="toggle-group">
+        <button class="toggle-btn" id="btn-devan" onclick="selectWork('デバン')">📦 デバン</button>
+        <button class="toggle-btn" id="btn-ban" onclick="selectWork('バン詰め')">🔧 バン詰め</button>
+      </div>
+    </div>
+
+    <div class="form-group">
+      <label>数量</label>
+      <div class="quantity-row">
+        <input type="number" id="qty1" placeholder="20" min="1" />
+        <div class="separator">×</div>
+        <input type="number" id="qty2" placeholder="1" min="1" />
+      </div>
+    </div>
+
+    <div class="form-group">
+      <label>営業担当者</label>
+      <select id="staff">
+        <option value="">--- 選択してください ---</option>
+        <option>田中</option>
+        <option>都知木</option>
+        <option>斎田</option>
+        <option>岩田</option>
+        <option>古賀</option>
+        <option>菊森</option>
+        <option>筒井</option>
+      </select>
+    </div>
+  </div>
+
+  <!-- 写真 -->
+  <div class="card">
+    <div class="card-title">写真</div>
+    <div class="photo-area" onclick="document.getElementById('photoInput').click()">
+      <input type="file" id="photoInput" accept="image/*" multiple onchange="handlePhotos(event)" />
+      <div class="photo-icon">📷</div>
+      <div class="photo-label">タップして写真を追加</div>
+      <div class="photo-sub">複数枚選択できます</div>
+    </div>
+    <div class="photo-grid" id="photoGrid"></div>
+    <div id="photoCount"></div>
+  </div>
+
+  <!-- プレビュー -->
+  <div class="card">
+    <div class="card-title">送信内容プレビュー</div>
+    <div class="preview-box" id="preview">入力すると自動で生成されます</div>
+  </div>
+
+  <!-- ボタン -->
+  <button class="btn-primary" onclick="copyText()">📋 テキストをコピー</button>
+  <button class="btn-secondary" onclick="resetForm()">🔄 リセット</button>
+
+</div>
+
+<div class="toast" id="toast">✅ コピーしました！</div>
+
+<script>
+  let selectedWork = '';
+  let photoCount = 0;
+
+  // 日付表示
+  const days = ['日','月','火','水','木','金','土'];
+  const now = new Date();
+  const y = now.getFullYear();
+  const m = String(now.getMonth()+1).padStart(2,'0');
+  const d = String(now.getDate()).padStart(2,'0');
+  const dateStr = `${y}${m}${d}`;
+  document.getElementById('dateDisplay').textContent = `${y}/${m}/${d}`;
+  document.getElementById('dayDisplay').textContent = `${days[now.getDay()]}曜日`;
+
+  function selectWork(type) {
+    selectedWork = type;
+    document.getElementById('btn-devan').classList.toggle('active', type === 'デバン');
+    document.getElementById('btn-ban').classList.toggle('active', type === 'バン詰め');
+    updatePreview();
+  }
+
+  function handlePhotos(event) {
+    const files = event.target.files;
+    photoCount = files.length;
+    const grid = document.getElementById('photoGrid');
+    grid.innerHTML = '';
+    Array.from(files).forEach(file => {
+      const reader = new FileReader();
+      reader.onload = e => {
+        const img = document.createElement('img');
+        img.src = e.target.result;
+        img.className = 'photo-thumb';
+        grid.appendChild(img);
+      };
+      reader.readAsDataURL(file);
+    });
+    document.getElementById('photoCount').innerHTML = files.length > 0
+      ? `<span class="photo-count">📷 ${files.length}枚選択中</span>`
+      : '';
+    updatePreview();
+  }
+
+  function updatePreview() {
+    const location = document.getElementById('location').value || '___';
+    const cargo = document.getElementById('cargo').value || '___';
+    const work = selectedWork || '___';
+    const qty1 = document.getElementById('qty1').value || '__';
+    const qty2 = document.getElementById('qty2').value || '__';
+    const staff = document.getElementById('staff').value || '___';
+    const photos = photoCount > 0 ? `写真${photoCount}枚` : '写真なし';
+
+    const text = `${dateStr} ${location} ${cargo} ${work} ${qty1}×${qty2}\n担当：${staff}\n${photos}`;
+    document.getElementById('preview').textContent = text;
+  }
+
+  // 全フィールドの変更監視
+  ['location','cargo','qty1','qty2','staff'].forEach(id => {
+    document.getElementById(id).addEventListener('input', updatePreview);
+  });
+
+  function copyText() {
+    const text = document.getElementById('preview').textContent;
+    if (text === '入力すると自動で生成されます') {
+      alert('内容を入力してください');
+      return;
+    }
+    navigator.clipboard.writeText(text).then(() => {
+      const toast = document.getElementById('toast');
+      toast.classList.add('show');
+      setTimeout(() => toast.classList.remove('show'), 2500);
+    });
+  }
+
+  function resetForm() {
+    document.getElementById('location').value = '';
+    document.getElementById('cargo').value = '';
+    document.getElementById('qty1').value = '';
+    document.getElementById('qty2').value = '';
+    document.getElementById('staff').value = '';
+    selectedWork = '';
+    document.getElementById('btn-devan').classList.remove('active');
+    document.getElementById('btn-ban').classList.remove('active');
+    document.getElementById('photoGrid').innerHTML = '';
+    document.getElementById('photoCount').innerHTML = '';
+    photoCount = 0;
+    document.getElementById('preview').textContent = '入力すると自動で生成されます';
+    document.getElementById('photoInput').value = '';
+  }
+</script>
+</body>
+</html>
